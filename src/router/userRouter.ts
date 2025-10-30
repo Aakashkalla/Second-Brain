@@ -2,7 +2,8 @@ import { Router } from "express";
 import jwt from "jsonwebtoken";
 import {z} from 'zod'
 import bcrypt from 'bcrypt'
-import { UserModel } from '../db'
+import { ContentModel, UserModel } from '../db'
+import { userMiddleware } from "../middleware";
 
 export const userRouter = Router();
 
@@ -92,8 +93,22 @@ userRouter.post('/signin',async(req,res)=>{
     }
 })
 
-userRouter.post('/content',(req,res)=>{
-    
+userRouter.use(userMiddleware)
+userRouter.post('/content',async (req,res)=>{
+    const {link, title , tags} = req.body
+    const userId = (req as any).userId; 
+    if (!userId) {
+        return res.status(403).json({ message: "Unauthorized" });
+    }
+    await ContentModel.create({
+        title,
+        link,
+        tags,
+        userId
+    })
+    res.status(200).json({
+        message:"Content Added"
+    })
 })
 
 userRouter.get('/content',(req,res)=>{
