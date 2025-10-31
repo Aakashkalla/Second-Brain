@@ -111,7 +111,13 @@ userRouter.post('/content',async (req,res)=>{
     })
 })
 
-userRouter.get('/content',(req,res)=>{
-
+userRouter.get('/content', async (req,res)=>{
+    const userId = (req as any).userId
+    const content = await ContentModel.find({
+        userId
+    }).populate('userId', 'username')
+    res.json({
+        content
+    })
 })
 
