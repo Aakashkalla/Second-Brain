@@ -18,7 +18,7 @@ const ContentSchema = new Schema({
         type : String
     },
     link : String,
-    tags : [{type : mongoose.Types.ObjectId, ref : 'Tag'}],
+    tags : String,
     userId : {
         type : mongoose.Types.ObjectId,
         ref : 'Users',

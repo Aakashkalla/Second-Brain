@@ -4,8 +4,10 @@ import express from "express";
 import { userRouter } from "./router/userRouter";
 import mongoose from "mongoose";
 import { brainRouter } from './router/brainRouter';
+import cors from 'cors';
 const app = express();
 
+app.use(cors());
 app.use(express.json())
 
 app.use('/api/v1/user', userRouter)
@@ -18,8 +20,9 @@ async function connectDB(){
     }catch(e){
         console.error(e)
     }
-    app.listen(3000, ()=>{
-    console.log("SERVER STARTED 3000")
-    });
 }
-connectDB();
+
+app.listen(3000, async () =>{
+    await connectDB()
+    console.log('Server Started')
+})
